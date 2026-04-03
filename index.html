@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph Analytics Learning Curriculum</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Source+Serif+4:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1117;
+    --surface: #161b22;
+    --surface-hover: #1c2230;
+    --border: #2a3140;
+    --text: #e2e8f0;
+    --text-dim: #8b95a5;
+    --accent: #58a6ff;
+    --accent-glow: rgba(88, 166, 255, 0.12);
+    --green: #3fb950;
+    --green-glow: rgba(63, 185, 80, 0.1);
+    --orange: #d29922;
+    --orange-glow: rgba(210, 153, 34, 0.1);
+    --purple: #bc8cff;
+    --purple-glow: rgba(188, 140, 255, 0.1);
+    --red: #f47067;
+    --red-glow: rgba(244, 112, 103, 0.1);
+    --teal: #39d2c0;
+    --teal-glow: rgba(57, 210, 192, 0.1);
+    --pink: #db61a2;
+    --pink-glow: rgba(219, 97, 162, 0.1);
+    --code-bg: #0d1117;
+    --radius: 10px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 2rem 1.5rem 6rem;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  /* ── Global Header ── */
+  .global-hero {
+    padding: 3rem 0 2.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  .global-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -50%; right: -50%; bottom: 0;
+    background: radial-gradient(ellipse at 20% 80%, var(--accent-glow) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, var(--purple-glow) 0%, transparent 40%),
+                radial-gradient(ellipse at 50% 50%, var(--green-glow) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .global-hero h1 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .global-hero > p {
+    color: var(--text-dim);
+    font-size: 1.05rem;
+    max-width: 680px;
+  }
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .overview-cell {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    text-align: center;
+  }
+  .overview-cell .num {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .overview-cell .label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── Phase Dividers ── */
+  .phase-divider {
+    margin: 3.5rem 0 2rem;
+    padding: 1.75rem 1.5rem;
+    border-radius: var(--radius);
+    position: relative;
+    overflow: hidden;
+  }
+  .phase-divider::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.07;
+    border-radius: var(--radius);
+  }
+  .pd-1 { border: 1px solid var(--accent); }
+  .pd-1::before { background: var(--accent); }
+  .pd-2 { border: 1px solid var(--green); }
+  .pd-2::before { background: var(--green); }
+  .pd-3 { border: 1px solid var(--orange); }
+  .pd-3::before { background: var(--orange); }
+  .pd-4 { border: 1px solid var(--purple); }
+  .pd-4::before { background: var(--purple); }
+  .pd-5 { border: 1px solid var(--teal); }
+  .pd-5::before { background: var(--teal); }
+  .pd-6 { border: 1px solid var(--pink); }
+  .pd-6::before { background: var(--pink); }
+  .phase-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .pd-1 .phase-tag { color: var(--accent); }
+  .pd-2 .phase-tag { color: var(--green); }
+  .pd-3 .phase-tag { color: var(--orange); }
+  .pd-4 .phase-tag { color: var(--purple); }
+  .pd-5 .phase-tag { color: var(--teal); }
+  .pd-6 .phase-tag { color: var(--pink); }
+  .phase-divider h2 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .phase-divider p { color: var(--text-dim); font-size: 0.95rem; }
+  .phase-tools {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    margin-top: 0.75rem;
+  }
+  .phase-tools span { color: var(--text); }
+
+  /* ── Step Sections ── */
+  .step-section { margin-bottom: 2rem; }
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    padding: 1.1rem 1.4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    transition: background 0.2s, border-color 0.2s;
+    user-select: none;
+  }
+  .step-header:hover { background: var(--surface-hover); }
+  .step-header.open { border-radius: var(--radius) var(--radius) 0 0; border-bottom-color: transparent; }
+  .step-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.55rem;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  /* phase color coding for step pills */
+  .p1 .step-num { background: var(--accent-glow); color: var(--accent); }
+  .p2 .step-num { background: var(--green-glow); color: var(--green); }
+  .p3 .step-num { background: var(--orange-glow); color: var(--orange); }
+  .p4 .step-num { background: var(--purple-glow); color: var(--purple); }
+  .p5 .step-num { background: var(--teal-glow); color: var(--teal); }
+  .p6 .step-num { background: var(--pink-glow); color: var(--pink); }
+  .step-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    flex: 1;
+  }
+  .chevron {
+    color: var(--text-dim);
+    transition: transform 0.3s;
+    font-size: 1.1rem;
+  }
+  .step-header.open .chevron { transform: rotate(180deg); }
+  .step-body {
+    display: none;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 1.75rem 1.4rem;
+    background: var(--surface);
+  }
+  .step-body.open { display: block; }
+
+  /* ── Content ── */
+  h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.05rem;
+    margin: 1.75rem 0 0.6rem;
+    color: var(--text);
+  }
+  h3:first-child { margin-top: 0; }
+  .step-body p, .step-body li {
+    color: var(--text-dim);
+    font-size: 0.92rem;
+    margin-bottom: 0.4rem;
+  }
+  .step-body ul { padding-left: 1.2rem; list-style: disc; margin-bottom: 1rem; }
+  .step-body li::marker { color: var(--border); }
+  a.resource-link {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  a.resource-link:hover { border-bottom-color: var(--accent); }
+
+  /* ── Lab Cards ── */
+  .lab-card {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    margin: 1rem 0 1.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .lab-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .p1 .lab-card::before { background: linear-gradient(90deg, var(--accent), transparent); }
+  .p2 .lab-card::before { background: linear-gradient(90deg, var(--green), transparent); }
+  .p3 .lab-card::before { background: linear-gradient(90deg, var(--orange), transparent); }
+  .p4 .lab-card::before { background: linear-gradient(90deg, var(--purple), transparent); }
+  .p5 .lab-card::before { background: linear-gradient(90deg, var(--teal), transparent); }
+  .p6 .lab-card::before { background: linear-gradient(90deg, var(--pink), transparent); }
+  .lab-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+  .lab-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+  }
+  .lab-objective {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-bottom: 0.9rem;
+  }
+
+  /* ── Code ── */
+  pre {
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.1rem;
+    overflow-x: auto;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: #c9d1d9;
+    margin: 0.6rem 0 0.9rem;
+  }
+  .kw { color: #ff7b72; }
+  .fn { color: #d2a8ff; }
+  .str { color: #a5d6ff; }
+  .cm { color: #8b949e; font-style: italic; }
+  .num { color: #79c0ff; }
+  .op { color: #c9d1d9; }
+
+  /* ── Checkpoint ── */
+  .checkpoint {
+    background: var(--surface);
+    border-left: 3px solid var(--green);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 0.9rem 1.1rem;
+    margin: 1.25rem 0;
+  }
+  .checkpoint-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 0.3rem;
+  }
+
+  .hint {
+    color: var(--text-dim);
+    font-size: 0.86rem;
+  }
+  .hint strong { color: var(--text); }
+
+  @media (max-width: 600px) {
+    body { padding: 1rem 1rem 4rem; }
+    .global-hero h1 { font-size: 1.7rem; }
+    .overview-grid { grid-template-columns: repeat(3, 1fr); }
+    pre { font-size: 0.72rem; padding: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════ -->
+<!--              GLOBAL HEADER                  -->
+<!-- ════════════════════════════════════════════ -->
+<header class="global-hero">
+  <h1>Graph Analytics<br>Learning Curriculum</h1>
+  <p>A self-paced, step-by-step path from zero to production graph analytics and graph ML — entirely on free, open platforms.</p>
+  <div class="overview-grid">
+    <div class="overview-cell"><div class="num">6</div><div class="label">Phases</div></div>
+    <div class="overview-cell"><div class="num">18</div><div class="label">Steps</div></div>
+    <div class="overview-cell"><div class="num">24</div><div class="label">Labs</div></div>
+    <div class="overview-cell"><div class="num">$0</div><div class="label">Cost</div></div>
+  </div>
+</header>
+
+
+<!-- ████████████████████████████████████████████ -->
+<!--              PHASE 1                        -->
+<!-- ████████████████████████████████████████████ -->
+<div class="phase-divider pd-1">
+  <div class="phase-tag">Phase 1 of 6</div>
+  <h2>Graph Foundations &amp; First Code</h2>
+  <p>Build the mental models and hands-on skills that everything else rests on — from graph theory vocabulary to writing your first NetworkX scripts.</p>
+  <div class="phase-tools">Tools: <span>Google Colab · NetworkX · Python</span></div>
+</div>
+
+<!-- Step 1 -->
+<section class="step-section p1">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 1</span>
+    <span class="step-title">Graph Theory Vocabulary &amp; Mental Models</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Define nodes, edges, and graphs — and recognize them in everyday data.</li>
+      <li>Distinguish directed vs. undirected, weighted vs. unweighted graphs.</li>
+      <li>Understand paths, cycles, degree, and connected components.</li>
+      <li>Set up a working Python environment with Google Colab + NetworkX.</li>
+    </ul>
+    <h3>Reading &amp; Video</h3>
+    <p><a class="resource-link" href="https://www.cs.cornell.edu/home/kleinber/networks-book/" target="_blank">Networks, Crowds, and Markets</a> — Ch. 1 &amp; 2. YouTube: search "graph theory introduction" from Reducible or TrevTutor for visual primers on nodes, edges, adjacency, and degree.</p>
+    <h3>Key Concepts</h3>
+    <p><strong>Node (vertex):</strong> An entity — person, city, gene, web page. <strong>Edge (link):</strong> A relationship — friendship, road, interaction. <strong>Directed edge:</strong> A → B (Twitter follow). <strong>Undirected:</strong> A — B (Facebook friendship). <strong>Degree:</strong> Edge count per node; splits into in/out-degree for directed graphs. <strong>Path:</strong> Edge sequence connecting two nodes. <strong>Cycle:</strong> Path returning to its start. <strong>Connected component:</strong> Maximal set of mutually reachable nodes.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 1</div>
+      <div class="lab-title">Environment Setup &amp; Your First Graph</div>
+      <div class="lab-objective">Goal: Create a Google Colab notebook, verify NetworkX, and build a tiny friendship graph.</div>
+<pre><span class="cm"># Cell 1 — Verify setup</span>
+<span class="kw">import</span> networkx <span class="kw">as</span> nx
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="fn">print</span>(nx.__version__)
+
+<span class="cm"># Cell 2 — Build a small undirected friendship graph</span>
+G = nx.<span class="fn">Graph</span>()
+G.<span class="fn">add_nodes_from</span>([<span class="str">"Alice"</span>, <span class="str">"Bob"</span>, <span class="str">"Carol"</span>, <span class="str">"Dave"</span>, <span class="str">"Eve"</span>])
+G.<span class="fn">add_edges_from</span>([
+    (<span class="str">"Alice"</span>, <span class="str">"Bob"</span>), (<span class="str">"Alice"</span>, <span class="str">"Carol"</span>),
+    (<span class="str">"Bob"</span>, <span class="str">"Carol"</span>), (<span class="str">"Carol"</span>, <span class="str">"Dave"</span>), (<span class="str">"Dave"</span>, <span class="str">"Eve"</span>),
+])
+
+<span class="cm"># Cell 3 — Inspect</span>
+<span class="fn">print</span>(<span class="str">f"Nodes: {G.number_of_nodes()}"</span>)
+<span class="fn">print</span>(<span class="str">f"Edges: {G.number_of_edges()}"</span>)
+<span class="fn">print</span>(<span class="str">f"Degree: {dict(G.degree())}"</span>)
+<span class="fn">print</span>(<span class="str">f"Connected: {nx.is_connected(G)}"</span>)
+
+<span class="cm"># Cell 4 — Visualize</span>
+plt.<span class="fn">figure</span>(figsize=(<span class="num">6</span>, <span class="num">4</span>))
+nx.<span class="fn">draw</span>(G, with_labels=<span class="kw">True</span>, node_color=<span class="str">"#58a6ff"</span>,
+       font_color=<span class="str">"white"</span>, node_size=<span class="num">800</span>, edge_color=<span class="str">"#555"</span>)
+plt.<span class="fn">show</span>()</pre>
+      <p class="hint"><strong>Try:</strong> Add "Frank" connected only to Eve. What changes? What if Frank knows nobody?</p>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 2</div>
+      <div class="lab-title">Directed Graphs &amp; Weighted Edges</div>
+      <div class="lab-objective">Goal: Model a directed, weighted flight network and explore how directionality changes analysis.</div>
+<pre><span class="cm"># Directed + weighted flight network</span>
+F = nx.<span class="fn">DiGraph</span>()
+routes = [
+    (<span class="str">"NYC"</span>,<span class="str">"LAX"</span>,<span class="num">250</span>), (<span class="str">"LAX"</span>,<span class="str">"NYC"</span>,<span class="num">280</span>), (<span class="str">"NYC"</span>,<span class="str">"CHI"</span>,<span class="num">120</span>),
+    (<span class="str">"CHI"</span>,<span class="str">"DEN"</span>,<span class="num">150</span>), (<span class="str">"DEN"</span>,<span class="str">"LAX"</span>,<span class="num">180</span>), (<span class="str">"LAX"</span>,<span class="str">"SFO"</span>,<span class="num">70</span>),
+    (<span class="str">"SFO"</span>,<span class="str">"NYC"</span>,<span class="num">300</span>),
+]
+<span class="kw">for</span> s, d, c <span class="kw">in</span> routes:
+    F.<span class="fn">add_edge</span>(s, d, weight=c)
+
+<span class="cm"># In-degree vs out-degree</span>
+<span class="kw">for</span> n <span class="kw">in</span> F.<span class="fn">nodes</span>():
+    <span class="fn">print</span>(<span class="str">f"{n}: in={F.in_degree(n)}, out={F.out_degree(n)}"</span>)
+
+<span class="cm"># Cheapest path NYC → SFO</span>
+path = nx.<span class="fn">shortest_path</span>(F, <span class="str">"NYC"</span>, <span class="str">"SFO"</span>, weight=<span class="str">"weight"</span>)
+cost = nx.<span class="fn">shortest_path_length</span>(F, <span class="str">"NYC"</span>, <span class="str">"SFO"</span>, weight=<span class="str">"weight"</span>)
+<span class="fn">print</span>(<span class="str">f"Cheapest: {' → '.join(path)} (${cost})"</span>)
+
+<span class="cm"># Visualize with edge labels</span>
+pos = nx.<span class="fn">spring_layout</span>(F, seed=<span class="num">42</span>)
+plt.<span class="fn">figure</span>(figsize=(<span class="num">8</span>,<span class="num">5</span>))
+nx.<span class="fn">draw</span>(F, pos, with_labels=<span class="kw">True</span>, node_color=<span class="str">"#d29922"</span>,
+       font_color=<span class="str">"white"</span>, node_size=<span class="num">900</span>, arrows=<span class="kw">True</span>, arrowsize=<span class="num">20</span>)
+nx.<span class="fn">draw_networkx_edge_labels</span>(F, pos,
+    edge_labels=nx.<span class="fn">get_edge_attributes</span>(F, <span class="str">"weight"</span>), font_size=<span class="num">8</span>)
+plt.<span class="fn">show</span>()</pre>
+      <p class="hint"><strong>Stretch:</strong> Add DEN→CHI for $90. Does cheapest NYC→SFO change? Use <code>nx.find_cycle(F, source="NYC")</code> to find cycles.</p>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 1 Check</div>
+      <p class="hint">You can sketch a graph from a word problem, build both directed and undirected graphs in NetworkX, and find shortest paths.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 2 -->
+<section class="step-section p1">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 2</span>
+    <span class="step-title">Graph Properties, Structures &amp; Real Data</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Understand adjacency matrices and adjacency lists as representations.</li>
+      <li>Recognize common graph structures: trees, stars, bipartite, complete.</li>
+      <li>Load real-world datasets and compute density, diameter, clustering coefficient.</li>
+    </ul>
+    <h3>Reading</h3>
+    <p><a class="resource-link" href="http://networksciencebook.com" target="_blank">Network Science</a> by Barabási — Ch. 2. Stanford CS224W Lecture 1 on YouTube.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 3</div>
+      <div class="lab-title">Adjacency Representations &amp; Graph Types</div>
+      <div class="lab-objective">Goal: Convert between representations and compare structural stats of common graph families.</div>
+<pre><span class="kw">import</span> networkx <span class="kw">as</span> nx, matplotlib.pyplot <span class="kw">as</span> plt
+
+<span class="cm"># Adjacency matrix</span>
+G = nx.<span class="fn">Graph</span>([(0,1),(0,2),(1,2),(2,3)])
+<span class="fn">print</span>(<span class="str">"Adj matrix:\n"</span>, nx.<span class="fn">to_numpy_array</span>(G))
+
+<span class="cm"># Compare graph types</span>
+graphs = {
+    <span class="str">"Complete K5"</span>: nx.<span class="fn">complete_graph</span>(<span class="num">5</span>),
+    <span class="str">"Star"</span>: nx.<span class="fn">star_graph</span>(<span class="num">5</span>),
+    <span class="str">"Tree"</span>: nx.<span class="fn">balanced_tree</span>(<span class="num">2</span>,<span class="num">3</span>),
+    <span class="str">"Bipartite"</span>: nx.<span class="fn">complete_bipartite_graph</span>(<span class="num">3</span>,<span class="num">4</span>),
+}
+fig, axes = plt.<span class="fn">subplots</span>(<span class="num">1</span>,<span class="num">4</span>,figsize=(<span class="num">16</span>,<span class="num">4</span>))
+<span class="kw">for</span> ax,(name,g) <span class="kw">in</span> <span class="fn">zip</span>(axes, graphs.<span class="fn">items</span>()):
+    nx.<span class="fn">draw</span>(g, ax=ax, with_labels=<span class="kw">True</span>, node_size=<span class="num">300</span>,
+           node_color=<span class="str">"#3fb950"</span>, font_size=<span class="num">8</span>, font_color=<span class="str">"white"</span>)
+    ax.<span class="fn">set_title</span>(name)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()
+
+<span class="kw">for</span> name, g <span class="kw">in</span> graphs.<span class="fn">items</span>():
+    <span class="fn">print</span>(<span class="str">f"{name:18} Density={nx.density(g):.3f}  Clustering={nx.average_clustering(g):.3f}"</span>)</pre>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 4</div>
+      <div class="lab-title">Profiling the Karate Club Network</div>
+      <div class="lab-objective">Goal: Load a classic dataset, compute structural metrics, and visualize faction membership.</div>
+<pre>K = nx.<span class="fn">karate_club_graph</span>()
+<span class="fn">print</span>(<span class="str">f"Nodes={K.number_of_nodes()} Edges={K.number_of_edges()}"</span>)
+<span class="fn">print</span>(<span class="str">f"Density={nx.density(K):.4f} Diameter={nx.diameter(K)}"</span>)
+<span class="fn">print</span>(<span class="str">f"Avg path={nx.average_shortest_path_length(K):.2f}"</span>)
+<span class="fn">print</span>(<span class="str">f"Clustering={nx.average_clustering(K):.4f}"</span>)
+
+<span class="cm"># Degree distribution</span>
+degrees = [d <span class="kw">for</span> _,d <span class="kw">in</span> K.<span class="fn">degree</span>()]
+plt.<span class="fn">hist</span>(degrees, bins=<span class="fn">range</span>(<span class="num">1</span>,<span class="fn">max</span>(degrees)+<span class="num">2</span>),
+        color=<span class="str">"#3fb950"</span>, edgecolor=<span class="str">"black"</span>)
+plt.<span class="fn">xlabel</span>(<span class="str">"Degree"</span>); plt.<span class="fn">ylabel</span>(<span class="str">"Count"</span>)
+plt.<span class="fn">title</span>(<span class="str">"Degree Distribution"</span>); plt.<span class="fn">show</span>()
+
+<span class="cm"># Color by faction</span>
+colors = [<span class="str">"#58a6ff"</span> <span class="kw">if</span> K.nodes[n][<span class="str">"club"</span>]==<span class="str">"Mr. Hi"</span> <span class="kw">else</span> <span class="str">"#d29922"</span> <span class="kw">for</span> n <span class="kw">in</span> K]
+nx.<span class="fn">draw_spring</span>(K, with_labels=<span class="kw">True</span>, node_color=colors,
+              node_size=<span class="num">500</span>, font_color=<span class="str">"white"</span>, seed=<span class="num">42</span>)
+plt.<span class="fn">show</span>()</pre>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 2 Check</div>
+      <p class="hint">You can write an adjacency matrix from a drawing, name 4+ graph families, and profile a real dataset with density, diameter, and clustering.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 3 -->
+<section class="step-section p1">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 3</span>
+    <span class="step-title">Traversal, Paths &amp; Your Own Graph Project</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Implement and understand BFS and DFS traversals.</li>
+      <li>Apply Dijkstra's algorithm for weighted shortest paths.</li>
+      <li>Build a mini-project: model a real system as a graph from raw data.</li>
+    </ul>
+    <h3>Reading</h3>
+    <p><a class="resource-link" href="https://www.cs.cornell.edu/home/kleinber/networks-book/" target="_blank">Networks, Crowds, and Markets</a> — Ch. 3. YouTube: Reducible's BFS/DFS and William Fiset's Dijkstra explainer.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 5</div>
+      <div class="lab-title">BFS, DFS &amp; Dijkstra</div>
+      <div class="lab-objective">Goal: Compare traversal orders and weighted vs. unweighted shortest paths.</div>
+<pre>G = nx.<span class="fn">Graph</span>()
+G.<span class="fn">add_weighted_edges_from</span>([
+    (<span class="str">"A"</span>,<span class="str">"B"</span>,<span class="num">4</span>),(<span class="str">"A"</span>,<span class="str">"C"</span>,<span class="num">2</span>),(<span class="str">"B"</span>,<span class="str">"D"</span>,<span class="num">3</span>),(<span class="str">"B"</span>,<span class="str">"E"</span>,<span class="num">1</span>),
+    (<span class="str">"C"</span>,<span class="str">"D"</span>,<span class="num">5</span>),(<span class="str">"C"</span>,<span class="str">"F"</span>,<span class="num">6</span>),(<span class="str">"D"</span>,<span class="str">"E"</span>,<span class="num">2</span>),(<span class="str">"E"</span>,<span class="str">"F"</span>,<span class="num">4</span>),
+])
+
+bfs = [<span class="str">"A"</span>] + [v <span class="kw">for</span> _,v <span class="kw">in</span> nx.<span class="fn">bfs_edges</span>(G,<span class="str">"A"</span>)]
+dfs = [<span class="str">"A"</span>] + [v <span class="kw">for</span> _,v <span class="kw">in</span> nx.<span class="fn">dfs_edges</span>(G,<span class="str">"A"</span>)]
+<span class="fn">print</span>(<span class="str">"BFS:"</span>, <span class="str">" → "</span>.join(bfs))
+<span class="fn">print</span>(<span class="str">"DFS:"</span>, <span class="str">" → "</span>.join(dfs))
+
+dij = nx.<span class="fn">dijkstra_path</span>(G,<span class="str">"A"</span>,<span class="str">"F"</span>)
+<span class="fn">print</span>(<span class="str">f"Dijkstra A→F: {' → '.join(dij)} (cost {nx.dijkstra_path_length(G,'A','F')})"</span>)
+hop = nx.<span class="fn">shortest_path</span>(G,<span class="str">"A"</span>,<span class="str">"F"</span>)
+<span class="fn">print</span>(<span class="str">f"Fewest hops: {' → '.join(hop)} ({len(hop)-1} hops)"</span>)</pre>
+      <p class="hint"><strong>Key question:</strong> Why do Dijkstra and fewest-hops pick different routes? When does each matter?</p>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 6 — Mini Project</div>
+      <div class="lab-title">Model Something Real</div>
+      <div class="lab-objective">Goal: Pick a real domain, build a graph from data, and deliver a Colab notebook with visualization and metrics.</div>
+      <p class="hint"><strong>Project ideas:</strong> Subreddit co-posting network, recipe ingredient co-occurrence, your Spotify artist graph, or a Wikipedia link subgraph.</p>
+<pre><span class="cm"># Template: ingredient co-occurrence</span>
+<span class="kw">from</span> itertools <span class="kw">import</span> combinations
+
+recipes = {
+    <span class="str">"Pasta"</span>: [<span class="str">"tomato"</span>,<span class="str">"garlic"</span>,<span class="str">"basil"</span>,<span class="str">"olive oil"</span>],
+    <span class="str">"Pizza"</span>: [<span class="str">"tomato"</span>,<span class="str">"mozzarella"</span>,<span class="str">"basil"</span>,<span class="str">"olive oil"</span>],
+    <span class="str">"Stir Fry"</span>: [<span class="str">"soy sauce"</span>,<span class="str">"garlic"</span>,<span class="str">"ginger"</span>,<span class="str">"sesame oil"</span>],
+    <span class="str">"Ramen"</span>: [<span class="str">"soy sauce"</span>,<span class="str">"garlic"</span>,<span class="str">"ginger"</span>,<span class="str">"egg"</span>],
+}
+G = nx.<span class="fn">Graph</span>()
+<span class="kw">for</span> ingredients <span class="kw">in</span> recipes.<span class="fn">values</span>():
+    <span class="kw">for</span> a,b <span class="kw">in</span> <span class="fn">combinations</span>(ingredients, <span class="num">2</span>):
+        <span class="kw">if</span> G.<span class="fn">has_edge</span>(a,b): G[a][b][<span class="str">"weight"</span>] += <span class="num">1</span>
+        <span class="kw">else</span>: G.<span class="fn">add_edge</span>(a, b, weight=<span class="num">1</span>)
+
+sizes = [<span class="num">300</span>+<span class="num">200</span>*G.<span class="fn">degree</span>(n) <span class="kw">for</span> n <span class="kw">in</span> G]
+nx.<span class="fn">draw_spring</span>(G, with_labels=<span class="kw">True</span>, node_size=sizes,
+              node_color=<span class="str">"#d29922"</span>, font_size=<span class="num">8</span>, seed=<span class="num">42</span>)
+plt.<span class="fn">show</span>()</pre>
+      <p class="hint"><strong>Deliverables:</strong> Colab notebook with Markdown headings, ≥1 visualization, computed metrics (density, degree distribution, path insight), and a short written interpretation.</p>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Phase 1 Complete</div>
+      <p class="hint">You can explain BFS vs DFS, use Dijkstra, identify components, and independently model, build, analyze, and visualize a real-world graph. Ready for Phase 2.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ████████████████████████████████████████████ -->
+<!--              PHASE 2                        -->
+<!-- ████████████████████████████████████████████ -->
+<div class="phase-divider pd-2">
+  <div class="phase-tag">Phase 2 of 6</div>
+  <h2>Centrality, Community Detection &amp; Visualization</h2>
+  <p>Learn to quantify node importance, discover hidden clusters, and produce publication-quality graph visualizations with Gephi.</p>
+  <div class="phase-tools">Tools: <span>Google Colab · NetworkX · Gephi Desktop (free) or Gephi Lite (web, no install)</span></div>
+</div>
+
+<!-- Step 4 -->
+<section class="step-section p2">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 4</span>
+    <span class="step-title">Centrality Measures — Who Matters Most?</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Compute and interpret degree, betweenness, closeness, and eigenvector centrality.</li>
+      <li>Understand when each measure reveals different "important" nodes.</li>
+      <li>Visualize centrality as node size/color on a graph layout.</li>
+    </ul>
+    <h3>Reading</h3>
+    <p><a class="resource-link" href="http://networksciencebook.com" target="_blank">Network Science</a> — Ch. 7. Stanford CS224W Lectures 2–3 on YouTube.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 7</div>
+      <div class="lab-title">Four Centralities on Karate Club</div>
+      <div class="lab-objective">Goal: Compute all four centralities, rank nodes by each, and see how rankings diverge.</div>
+<pre><span class="kw">import</span> networkx <span class="kw">as</span> nx
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+K = nx.<span class="fn">karate_club_graph</span>()
+
+centralities = {
+    <span class="str">"Degree"</span>: nx.<span class="fn">degree_centrality</span>(K),
+    <span class="str">"Betweenness"</span>: nx.<span class="fn">betweenness_centrality</span>(K),
+    <span class="str">"Closeness"</span>: nx.<span class="fn">closeness_centrality</span>(K),
+    <span class="str">"Eigenvector"</span>: nx.<span class="fn">eigenvector_centrality</span>(K),
+}
+
+<span class="cm"># Top 5 per centrality</span>
+<span class="kw">for</span> name, scores <span class="kw">in</span> centralities.<span class="fn">items</span>():
+    top = <span class="fn">sorted</span>(scores, key=scores.get, reverse=<span class="kw">True</span>)[:<span class="num">5</span>]
+    <span class="fn">print</span>(<span class="str">f"{name:14} top 5: {top}"</span>)
+
+<span class="cm"># Visualize each as node size</span>
+fig, axes = plt.<span class="fn">subplots</span>(<span class="num">2</span>,<span class="num">2</span>, figsize=(<span class="num">14</span>,<span class="num">12</span>))
+pos = nx.<span class="fn">spring_layout</span>(K, seed=<span class="num">42</span>)
+
+<span class="kw">for</span> ax, (name, scores) <span class="kw">in</span> <span class="fn">zip</span>(axes.flat, centralities.<span class="fn">items</span>()):
+    sizes = [<span class="num">3000</span> * scores[n] + <span class="num">100</span> <span class="kw">for</span> n <span class="kw">in</span> K]
+    colors = [scores[n] <span class="kw">for</span> n <span class="kw">in</span> K]
+    nx.<span class="fn">draw</span>(K, pos, ax=ax, node_size=sizes, node_color=colors,
+           cmap=plt.cm.YlGnBu, with_labels=<span class="kw">True</span>, font_size=<span class="num">7</span>,
+           edge_color=<span class="str">"#444"</span>)
+    ax.<span class="fn">set_title</span>(name, fontsize=<span class="num">13</span>)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()</pre>
+      <p class="hint"><strong>Explore:</strong> Node 0 tops degree centrality, but does it always top betweenness? Which nodes are "bridges" but not hubs? Why does eigenvector centrality reward connection to other well-connected nodes?</p>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 4 Check</div>
+      <p class="hint">You can explain the difference between the four centrality measures in plain language and compute them on any NetworkX graph.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 5 -->
+<section class="step-section p2">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 5</span>
+    <span class="step-title">Community Detection Algorithms</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Understand modularity and what it means for a partition to be "good."</li>
+      <li>Apply Louvain, Label Propagation, and Girvan-Newman algorithms.</li>
+      <li>Compare algorithm outputs and evaluate with modularity scores.</li>
+    </ul>
+    <h3>Reading</h3>
+    <p>Network Science — Ch. 9 (Communities). The original Louvain paper summary is worth skimming for intuition on the greedy modularity optimization.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 8</div>
+      <div class="lab-title">Finding Communities in the Karate Club</div>
+      <div class="lab-objective">Goal: Run multiple community detection algorithms, compare results to ground-truth factions, and evaluate modularity.</div>
+<pre><span class="kw">import</span> networkx <span class="kw">as</span> nx
+<span class="kw">from</span> networkx.algorithms.community <span class="kw">import</span> (
+    louvain_communities, label_propagation_communities,
+    girvan_newman, modularity
+)
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+
+K = nx.<span class="fn">karate_club_graph</span>()
+pos = nx.<span class="fn">spring_layout</span>(K, seed=<span class="num">42</span>)
+
+<span class="cm"># Ground truth</span>
+truth = [
+    {n <span class="kw">for</span> n <span class="kw">in</span> K <span class="kw">if</span> K.nodes[n][<span class="str">"club"</span>]==<span class="str">"Mr. Hi"</span>},
+    {n <span class="kw">for</span> n <span class="kw">in</span> K <span class="kw">if</span> K.nodes[n][<span class="str">"club"</span>]==<span class="str">"Officer"</span>},
+]
+
+<span class="cm"># Three algorithms</span>
+louvain   = <span class="fn">list</span>(<span class="fn">louvain_communities</span>(K, seed=<span class="num">42</span>))
+label_prop = <span class="fn">list</span>(<span class="fn">label_propagation_communities</span>(K))
+gn_iter   = <span class="fn">girvan_newman</span>(K)
+gn_2      = <span class="fn">next</span>(gn_iter)  <span class="cm"># first split = 2 communities</span>
+gn_2      = [<span class="fn">set</span>(c) <span class="kw">for</span> c <span class="kw">in</span> gn_2]
+
+results = {
+    <span class="str">"Ground Truth"</span>: truth,
+    <span class="str">"Louvain"</span>: louvain,
+    <span class="str">"Label Prop"</span>: label_prop,
+    <span class="str">"Girvan-Newman"</span>: gn_2,
+}
+
+<span class="cm"># Modularity comparison</span>
+<span class="kw">for</span> name, comms <span class="kw">in</span> results.<span class="fn">items</span>():
+    mod = <span class="fn">modularity</span>(K, comms)
+    <span class="fn">print</span>(<span class="str">f"{name:16} communities={len(comms)}  modularity={mod:.4f}"</span>)
+
+<span class="cm"># Side-by-side visualization</span>
+fig, axes = plt.<span class="fn">subplots</span>(<span class="num">1</span>,<span class="num">4</span>, figsize=(<span class="num">20</span>,<span class="num">5</span>))
+palette = [<span class="str">"#58a6ff"</span>,<span class="str">"#d29922"</span>,<span class="str">"#3fb950"</span>,<span class="str">"#f47067"</span>,<span class="str">"#bc8cff"</span>]
+<span class="kw">for</span> ax, (name, comms) <span class="kw">in</span> <span class="fn">zip</span>(axes, results.<span class="fn">items</span>()):
+    color_map = {}
+    <span class="kw">for</span> i, comm <span class="kw">in</span> <span class="fn">enumerate</span>(comms):
+        <span class="kw">for</span> n <span class="kw">in</span> comm:
+            color_map[n] = palette[i % <span class="fn">len</span>(palette)]
+    colors = [color_map[n] <span class="kw">for</span> n <span class="kw">in</span> K]
+    nx.<span class="fn">draw</span>(K, pos, ax=ax, node_color=colors, with_labels=<span class="kw">True</span>,
+           node_size=<span class="num">400</span>, font_size=<span class="num">7</span>, edge_color=<span class="str">"#444"</span>)
+    ax.<span class="fn">set_title</span>(name)
+plt.<span class="fn">tight_layout</span>(); plt.<span class="fn">show</span>()</pre>
+      <p class="hint"><strong>Explore:</strong> Which algorithm best recovers the ground-truth split? What does a higher modularity score actually mean in terms of internal vs. external edges?</p>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 5 Check</div>
+      <p class="hint">You can run 3 community detection algorithms, compare their outputs via modularity, and explain modularity in plain language.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 6 -->
+<section class="step-section p2">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 6</span>
+    <span class="step-title">Interactive Visualization with Gephi</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Export a graph from NetworkX in a format Gephi can import.</li>
+      <li>Apply force-directed layouts (ForceAtlas2) for readable visualizations.</li>
+      <li>Map centrality → node size and community → color in Gephi's UI.</li>
+      <li>Produce a publication-quality graph image.</li>
+    </ul>
+    <h3>Setup</h3>
+    <p><strong>Option A (no install):</strong> Use <a class="resource-link" href="https://lite.gephi.org" target="_blank">Gephi Lite</a> — a web-based version (v1.0, released 2025) that runs in your browser. It supports GEXF import, ForceAtlas2 layout, partition coloring, and export. Great for getting started without installing anything.</p>
+    <p><strong>Option B (desktop):</strong> Download <a class="resource-link" href="https://gephi.org" target="_blank">Gephi Desktop</a> (free, open-source, Windows/Mac/Linux, current stable 0.10.x). It requires Java 17 — the installer bundles it. The desktop version handles larger graphs and offers more layout and export options.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 9</div>
+      <div class="lab-title">NetworkX → Gephi Pipeline</div>
+      <div class="lab-objective">Goal: Export a graph with attributes from NetworkX, import into Gephi, and apply layout + styling.</div>
+<pre><span class="cm"># In Colab: export Karate Club with centrality as node attributes</span>
+<span class="kw">import</span> networkx <span class="kw">as</span> nx
+
+K = nx.<span class="fn">karate_club_graph</span>()
+bc = nx.<span class="fn">betweenness_centrality</span>(K)
+comms = <span class="fn">list</span>(nx.algorithms.community.<span class="fn">louvain_communities</span>(K, seed=<span class="num">42</span>))
+
+<span class="cm"># Attach attributes to nodes</span>
+<span class="kw">for</span> n <span class="kw">in</span> K:
+    K.nodes[n][<span class="str">"betweenness"</span>] = <span class="fn">round</span>(bc[n], <span class="num">4</span>)
+    <span class="kw">for</span> i, c <span class="kw">in</span> <span class="fn">enumerate</span>(comms):
+        <span class="kw">if</span> n <span class="kw">in</span> c:
+            K.nodes[n][<span class="str">"community"</span>] = i
+
+<span class="cm"># Export as GEXF (Gephi's native format)</span>
+nx.<span class="fn">write_gexf</span>(K, <span class="str">"karate_enriched.gexf"</span>)
+<span class="fn">print</span>(<span class="str">"Saved karate_enriched.gexf — download and open in Gephi"</span>)</pre>
+      <p class="hint"><strong>Gephi Desktop walkthrough</strong> (or use Gephi Lite for a lighter workflow):</p>
+      <ul>
+        <li>File → Open → karate_enriched.gexf</li>
+        <li>Layout panel → ForceAtlas2 → Run until stable → Stop</li>
+        <li>Appearance → Nodes → Size → Ranking → "betweenness" → Min 10, Max 60 → Apply</li>
+        <li>Appearance → Nodes → Color → Partition → "community" → Apply</li>
+        <li>Preview → Refresh → Export as PNG or SVG</li>
+      </ul>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 10</div>
+      <div class="lab-title">Visualize a Larger Network</div>
+      <div class="lab-objective">Goal: Download a network from SNAP, load into Gephi, and produce a meaningful visualization of 1,000+ nodes.</div>
+      <p class="hint">Go to <a class="resource-link" href="https://snap.stanford.edu/data/" target="_blank">SNAP datasets</a>. Good choices: the Facebook ego network (4K nodes), the email-Eu-core network (1K nodes), or the Wikipedia vote network (7K nodes). Download the edge list, import into Gephi via File → Open, and apply the same layout/color/size pipeline from Lab 9. Gephi handles 10K+ nodes smoothly where matplotlib would struggle.</p>
+      <p class="hint"><strong>Analysis questions:</strong> How many communities does Gephi's built-in modularity algorithm find? Are there visible "bridge" nodes? How does the degree distribution compare to the small Karate Club?</p>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Phase 2 Complete</div>
+      <p class="hint">You can quantify node importance four ways, detect communities algorithmically, and produce polished visualizations in Gephi. Ready for Phase 3.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ████████████████████████████████████████████ -->
+<!--              PHASE 3                        -->
+<!-- ████████████████████████████████████████████ -->
+<div class="phase-divider pd-3">
+  <div class="phase-tag">Phase 3 of 6</div>
+  <h2>Graph Databases &amp; Querying with Cypher</h2>
+  <p>Move from in-memory analysis to persistent, queryable graph storage. Learn the property graph model, master Cypher, and build real queries on Neo4j.</p>
+  <div class="phase-tools">Tools: <span>Neo4j Aura Free (or Neo4j Desktop) · Neo4j GraphAcademy · Cypher</span></div>
+</div>
+
+<!-- Step 7 -->
+<section class="step-section p3">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 7</span>
+    <span class="step-title">The Property Graph Model &amp; Neo4j Setup</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Understand the property graph model: labeled nodes, typed relationships, key-value properties.</li>
+      <li>Contrast with relational (tables + joins) and document models.</li>
+      <li>Set up a free Neo4j Aura instance and load a sample dataset.</li>
+    </ul>
+    <h3>Resources</h3>
+    <p>Complete the free <a class="resource-link" href="https://graphacademy.neo4j.com/courses/neo4j-fundamentals/" target="_blank">Neo4j Fundamentals</a> course on GraphAcademy (~2 hrs). It covers the data model, use cases, and includes a sandbox environment.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 11</div>
+      <div class="lab-title">Spin Up Neo4j &amp; Explore the Movies Database</div>
+      <div class="lab-objective">Goal: Create a free Neo4j Aura instance, load the built-in Movies dataset, and run your first Cypher queries.</div>
+<pre><span class="cm">// In the Neo4j Browser, run the built-in guide:</span>
+:play movies
+
+<span class="cm">// After loading, explore the schema</span>
+<span class="kw">CALL</span> db.schema.visualization()
+
+<span class="cm">// Find all movies Tom Hanks acted in</span>
+<span class="kw">MATCH</span> (p:Person {name: <span class="str">"Tom Hanks"</span>})-[:ACTED_IN]->(m:Movie)
+<span class="kw">RETURN</span> p.name, m.title, m.released
+<span class="kw">ORDER BY</span> m.released
+
+<span class="cm">// Who directed a movie that Tom Hanks acted in?</span>
+<span class="kw">MATCH</span> (tom:Person {name: <span class="str">"Tom Hanks"</span>})-[:ACTED_IN]->(m)<-[:DIRECTED]-(d)
+<span class="kw">RETURN</span> d.name, m.title
+
+<span class="cm">// Count movies per decade</span>
+<span class="kw">MATCH</span> (m:Movie)
+<span class="kw">RETURN</span> (m.released / <span class="num">10</span>) * <span class="num">10</span> <span class="kw">AS</span> decade, <span class="fn">count</span>(m) <span class="kw">AS</span> movies
+<span class="kw">ORDER BY</span> decade</pre>
+      <p class="hint"><strong>Key insight:</strong> Notice how graph queries read like English — "match a person who acted in a movie that was directed by someone." No JOIN syntax needed.</p>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 7 Check</div>
+      <p class="hint">You have a running Neo4j instance, understand labeled nodes and typed relationships, and can read basic Cypher patterns.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 8 -->
+<section class="step-section p3">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 8</span>
+    <span class="step-title">Cypher Deep Dive — Pattern Matching &amp; Aggregation</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Write multi-hop pattern matches with variable-length paths.</li>
+      <li>Use WHERE, WITH, UNWIND, and aggregation functions.</li>
+      <li>Create, update, and delete nodes and relationships.</li>
+    </ul>
+    <h3>Resources</h3>
+    <p>Complete the free <a class="resource-link" href="https://graphacademy.neo4j.com/courses/cypher-fundamentals/" target="_blank">Cypher Fundamentals</a> course on GraphAcademy.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 12</div>
+      <div class="lab-title">Advanced Cypher on Movies</div>
+      <div class="lab-objective">Goal: Write increasingly complex queries — variable-length paths, shortest paths, recommendations.</div>
+<pre><span class="cm">// Actors within 3 hops of Kevin Bacon</span>
+<span class="kw">MATCH</span> (bacon:Person {name:<span class="str">"Kevin Bacon"</span>})-[:ACTED_IN*1..3]-(other:Person)
+<span class="kw">RETURN DISTINCT</span> other.name
+<span class="kw">LIMIT</span> <span class="num">20</span>
+
+<span class="cm">// Shortest path between two actors</span>
+<span class="kw">MATCH</span> path = <span class="fn">shortestPath</span>(
+  (a:Person {name:<span class="str">"Tom Hanks"</span>})-[*]-(b:Person {name:<span class="str">"Keanu Reeves"</span>})
+)
+<span class="kw">RETURN</span> path, <span class="fn">length</span>(path) <span class="kw">AS</span> hops
+
+<span class="cm">// Movie recommendation: people who liked what I liked also liked...</span>
+<span class="kw">MATCH</span> (me:Person {name:<span class="str">"Tom Hanks"</span>})-[:ACTED_IN]->(m)<-[:ACTED_IN]-(coactor)
+       -[:ACTED_IN]->(rec)
+<span class="kw">WHERE NOT</span> (me)-[:ACTED_IN]->(rec)
+<span class="kw">RETURN</span> rec.title, <span class="fn">count</span>(coactor) <span class="kw">AS</span> score
+<span class="kw">ORDER BY</span> score <span class="kw">DESC LIMIT</span> <span class="num">10</span>
+
+<span class="cm">// Create your own data</span>
+<span class="kw">CREATE</span> (you:Person {name: <span class="str">"Your Name"</span>})
+<span class="kw">WITH</span> you
+<span class="kw">MATCH</span> (m:Movie {title: <span class="str">"The Matrix"</span>})
+<span class="kw">CREATE</span> (you)-[:REVIEWED {rating: <span class="num">9</span>, summary: <span class="str">"Mind-bending"</span>}]->(m)
+<span class="kw">RETURN</span> you, m</pre>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 8 Check</div>
+      <p class="hint">You can write multi-hop queries, find shortest paths in Cypher, and build a basic recommendation query.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 9 -->
+<section class="step-section p3">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 9</span>
+    <span class="step-title">Data Modeling &amp; Import Your Own Dataset</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Design a property graph schema from raw tabular data.</li>
+      <li>Use LOAD CSV and UNWIND to bulk-import data into Neo4j.</li>
+      <li>Create indexes and constraints for performance.</li>
+    </ul>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 13</div>
+      <div class="lab-title">Model &amp; Import a Custom Dataset</div>
+      <div class="lab-objective">Goal: Take a CSV dataset, design a graph schema, import it, and query it in Neo4j.</div>
+<pre><span class="cm">// Example: import an airport routes CSV</span>
+<span class="cm">// CSV columns: source_airport, dest_airport, airline, distance</span>
+
+<span class="cm">// Step 1: Create constraints</span>
+<span class="kw">CREATE CONSTRAINT</span> airport_code <span class="kw">IF NOT EXISTS
+FOR</span> (a:Airport) <span class="kw">REQUIRE</span> a.code <span class="kw">IS UNIQUE</span>
+
+<span class="cm">// Step 2: Load nodes</span>
+<span class="kw">LOAD CSV WITH HEADERS FROM</span> <span class="str">"https://your-url/routes.csv"</span> <span class="kw">AS</span> row
+<span class="kw">MERGE</span> (src:Airport {code: row.source_airport})
+<span class="kw">MERGE</span> (dst:Airport {code: row.dest_airport})
+<span class="kw">MERGE</span> (src)-[:ROUTE {
+  airline: row.airline,
+  distance: <span class="fn">toInteger</span>(row.distance)
+}]->(dst)
+
+<span class="cm">// Step 3: Verify</span>
+<span class="kw">MATCH</span> (a:Airport)
+<span class="kw">RETURN</span> <span class="fn">count</span>(a) <span class="kw">AS</span> airports
+
+<span class="cm">// Step 4: Query — busiest airports</span>
+<span class="kw">MATCH</span> (a:Airport)-[r:ROUTE]-()
+<span class="kw">RETURN</span> a.code, <span class="fn">count</span>(r) <span class="kw">AS</span> routes
+<span class="kw">ORDER BY</span> routes <span class="kw">DESC LIMIT</span> <span class="num">10</span></pre>
+      <p class="hint"><strong>Dataset ideas:</strong> OpenFlights routes CSV (free), Stack Overflow tag co-occurrence, or the dataset from your Phase 1 mini-project.</p>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 14</div>
+      <div class="lab-title">Cypher Analytics Workbench</div>
+      <div class="lab-objective">Goal: Write analytical queries on your imported dataset — degree distribution, path analysis, and simple recommendations.</div>
+<pre><span class="cm">// Degree distribution via Cypher</span>
+<span class="kw">MATCH</span> (a:Airport)
+<span class="kw">WITH</span> a, <span class="fn">size</span>((a)-[:ROUTE]-()) <span class="kw">AS</span> degree
+<span class="kw">RETURN</span> degree, <span class="fn">count</span>(a) <span class="kw">AS</span> frequency
+<span class="kw">ORDER BY</span> degree
+
+<span class="cm">// Shortest route between two airports</span>
+<span class="kw">MATCH</span> path = <span class="fn">shortestPath</span>(
+  (a:Airport {code:<span class="str">"JFK"</span>})-[:ROUTE*]-(b:Airport {code:<span class="str">"NRT"</span>})
+)
+<span class="kw">RETURN</span> [n <span class="kw">IN</span> <span class="fn">nodes</span>(path) | n.code] <span class="kw">AS</span> stops, <span class="fn">length</span>(path) <span class="kw">AS</span> hops
+
+<span class="cm">// Find triangles (mutual routes via a common hub)</span>
+<span class="kw">MATCH</span> (a:Airport)-[:ROUTE]->(hub)-[:ROUTE]->(b:Airport)-[:ROUTE]->(a)
+<span class="kw">RETURN</span> a.code, hub.code, b.code
+<span class="kw">LIMIT</span> <span class="num">20</span></pre>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Phase 3 Complete</div>
+      <p class="hint">You can design a property graph schema, import data via Cypher, and write multi-hop analytical queries. Ready for Phase 4.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ████████████████████████████████████████████ -->
+<!--              PHASE 4                        -->
+<!-- ████████████████████████████████████████████ -->
+<div class="phase-divider pd-4">
+  <div class="phase-tag">Phase 4 of 6</div>
+  <h2>Graph Analytics at Scale</h2>
+  <p>Run production-grade algorithms — PageRank, community detection, node similarity, link prediction — on larger datasets using Neo4j's Graph Data Science library.</p>
+  <div class="phase-tools">Tools: <span>Neo4j Sandbox (free, GDS pre-loaded) or Neo4j Desktop (free) + GDS plugin · Cypher</span></div>
+</div>
+
+<div style="background:var(--surface);border:1px solid var(--orange);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:2rem;">
+  <p style="color:var(--orange);font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.3rem;">⚠ Platform Note</p>
+  <p style="color:var(--text-dim);font-size:0.88rem;margin:0;"><strong style="color:var(--text);">GDS does not run on Neo4j Aura Free.</strong> For this phase, use one of these free options: (1) <a class="resource-link" href="https://sandbox.neo4j.com" target="_blank">Neo4j Sandbox</a> — free 3-day cloud instances with GDS pre-loaded (renewable), (2) <a class="resource-link" href="https://neo4j.com/download/" target="_blank">Neo4j Desktop</a> — free local install with one-click GDS plugin, or (3) the <a class="resource-link" href="https://graphacademy.neo4j.com/courses/graph-data-science-fundamentals/" target="_blank">GraphAcademy GDS course</a> which auto-provisions a free sandbox for you.</p>
+</div>
+
+<!-- Step 10 -->
+<section class="step-section p4">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 10</span>
+    <span class="step-title">GDS Setup &amp; Graph Projections</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Understand what the GDS library adds on top of base Cypher.</li>
+      <li>Create in-memory graph projections for efficient algorithm execution.</li>
+      <li>Learn the stream / stats / mutate / write execution modes.</li>
+    </ul>
+    <h3>Resources</h3>
+    <p>Complete the free <a class="resource-link" href="https://graphacademy.neo4j.com/courses/graph-data-science-fundamentals/" target="_blank">Get Started with Graph Data Science</a> course on GraphAcademy. It auto-creates a free sandbox with GDS and a movie dataset.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 15</div>
+      <div class="lab-title">Project a Graph &amp; Run PageRank</div>
+      <div class="lab-objective">Goal: Create a GDS projection and run your first production algorithm.</div>
+<pre><span class="cm">// Create an in-memory graph projection</span>
+<span class="kw">CALL</span> gds.graph.project(
+  <span class="str">'movies'</span>,
+  [<span class="str">'Person'</span>, <span class="str">'Movie'</span>],
+  {ACTED_IN: {orientation: <span class="str">'UNDIRECTED'</span>}}
+)
+
+<span class="cm">// Run PageRank in stream mode (returns results, doesn't write)</span>
+<span class="kw">CALL</span> gds.pageRank.stream(<span class="str">'movies'</span>)
+<span class="kw">YIELD</span> nodeId, score
+<span class="kw">WITH</span> gds.util.asNode(nodeId) <span class="kw">AS</span> node, score
+<span class="kw">WHERE</span> <span class="str">'Person'</span> <span class="kw">IN</span> <span class="fn">labels</span>(node)
+<span class="kw">RETURN</span> node.name <span class="kw">AS</span> person, <span class="fn">round</span>(score, <span class="num">4</span>) <span class="kw">AS</span> pagerank
+<span class="kw">ORDER BY</span> pagerank <span class="kw">DESC LIMIT</span> <span class="num">10</span>
+
+<span class="cm">// Write PageRank back to nodes as a property</span>
+<span class="kw">CALL</span> gds.pageRank.write(<span class="str">'movies'</span>, {writeProperty: <span class="str">'pagerank'</span>})
+<span class="kw">YIELD</span> nodePropertiesWritten, ranIterations</pre>
+      <p class="hint"><strong>Compare:</strong> How does GDS PageRank ranking compare to the degree centrality ranking you computed in NetworkX? Are the same people at the top?</p>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 10 Check</div>
+      <p class="hint">You can create a GDS projection, run PageRank, and understand stream vs. write modes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 11 -->
+<section class="step-section p4">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 11</span>
+    <span class="step-title">Community Detection &amp; Similarity at Scale</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Run Louvain and Label Propagation via GDS and compare to NetworkX results.</li>
+      <li>Compute node similarity (Jaccard, Cosine) to find structurally similar nodes.</li>
+      <li>Understand how these feed into recommendation engines.</li>
+    </ul>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 16</div>
+      <div class="lab-title">Scalable Community Detection &amp; Similarity</div>
+      <div class="lab-objective">Goal: Detect communities and compute pairwise similarity on your projected graph.</div>
+<pre><span class="cm">// Louvain community detection</span>
+<span class="kw">CALL</span> gds.louvain.stream(<span class="str">'movies'</span>)
+<span class="kw">YIELD</span> nodeId, communityId
+<span class="kw">WITH</span> gds.util.asNode(nodeId) <span class="kw">AS</span> node, communityId
+<span class="kw">RETURN</span> communityId, <span class="fn">count</span>(node) <span class="kw">AS</span> size,
+       <span class="fn">collect</span>(node.name)[..<span class="num">5</span>] <span class="kw">AS</span> sample_members
+<span class="kw">ORDER BY</span> size <span class="kw">DESC LIMIT</span> <span class="num">10</span>
+
+<span class="cm">// Node similarity — who has the most similar acting portfolio?</span>
+<span class="kw">CALL</span> gds.nodeSimilarity.stream(<span class="str">'movies'</span>)
+<span class="kw">YIELD</span> node1, node2, similarity
+<span class="kw">WITH</span> gds.util.asNode(node1) <span class="kw">AS</span> p1,
+     gds.util.asNode(node2) <span class="kw">AS</span> p2, similarity
+<span class="kw">WHERE</span> <span class="str">'Person'</span> <span class="kw">IN</span> <span class="fn">labels</span>(p1)
+<span class="kw">RETURN</span> p1.name, p2.name, <span class="fn">round</span>(similarity, <span class="num">3</span>) <span class="kw">AS</span> sim
+<span class="kw">ORDER BY</span> sim <span class="kw">DESC LIMIT</span> <span class="num">10</span></pre>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 11 Check</div>
+      <p class="hint">You can detect communities at scale, compute similarity, and explain how similarity powers recommendations.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 12 -->
+<section class="step-section p4">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 12</span>
+    <span class="step-title">Link Prediction &amp; Algorithm Pipelines</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Understand link prediction as a core graph analytics task.</li>
+      <li>Use GDS link prediction functions (Common Neighbors, Adamic-Adar, Preferential Attachment).</li>
+      <li>Chain algorithms into pipelines: project → compute → predict.</li>
+    </ul>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 17</div>
+      <div class="lab-title">Predicting Missing Connections</div>
+      <div class="lab-objective">Goal: Use link prediction scores to suggest relationships that probably exist but aren't in the data.</div>
+<pre><span class="cm">// Common neighbors score for pairs not yet connected</span>
+<span class="kw">MATCH</span> (p1:Person)-[:ACTED_IN]->(m)<-[:ACTED_IN]-(p2:Person)
+<span class="kw">WHERE</span> p1 &lt; p2
+  <span class="kw">AND NOT</span> (p1)-[:ACTED_IN]->()<-[:ACTED_IN]-(p2)
+<span class="kw">WITH</span> p1, p2, <span class="fn">count</span>(m) <span class="kw">AS</span> commonMovies
+<span class="kw">RETURN</span> p1.name, p2.name, commonMovies
+<span class="kw">ORDER BY</span> commonMovies <span class="kw">DESC LIMIT</span> <span class="num">10</span>
+
+<span class="cm">// GDS link prediction (Adamic-Adar)</span>
+<span class="kw">MATCH</span> (a:Person {name:<span class="str">"Tom Hanks"</span>})
+<span class="kw">MATCH</span> (b:Person)
+<span class="kw">WHERE</span> a &lt;> b <span class="kw">AND NOT</span> (a)-[:ACTED_IN]->()<-[:ACTED_IN]-(b)
+<span class="kw">RETURN</span> b.name,
+       gds.alpha.linkprediction.<span class="fn">adamicAdar</span>(a, b) <span class="kw">AS</span> score
+<span class="kw">ORDER BY</span> score <span class="kw">DESC LIMIT</span> <span class="num">10</span></pre>
+    </div>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 18</div>
+      <div class="lab-title">Full Pipeline — Your Dataset</div>
+      <div class="lab-objective">Goal: Run a complete GDS pipeline on your own imported dataset: project → PageRank → community → similarity → link prediction.</div>
+      <p class="hint">Use the dataset you imported in Phase 3. Project it with GDS, run all four algorithm categories, and write a short analysis notebook comparing the most influential nodes (PageRank) with the most connected (degree) and the most bridging (betweenness from Phase 2). Do the same people/airports/entities appear across measures?</p>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Phase 4 Complete</div>
+      <p class="hint">You can run production graph analytics pipelines — PageRank, community detection, similarity, link prediction — on scaled datasets using GDS. Ready for Phase 5.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ████████████████████████████████████████████ -->
+<!--              PHASE 5                        -->
+<!-- ████████████████████████████████████████████ -->
+<div class="phase-divider pd-5">
+  <div class="phase-tag">Phase 5 of 6</div>
+  <h2>Graph Machine Learning</h2>
+  <p>Cross from analytics into ML territory — generate node embeddings, train graph neural networks, and apply them to real prediction tasks using PyTorch Geometric.</p>
+  <div class="phase-tools">Tools: <span>Google Colab (GPU) · PyTorch Geometric · NetworkX · DGL (optional)</span></div>
+</div>
+
+<!-- Step 13 -->
+<section class="step-section p5">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 13</span>
+    <span class="step-title">Node Embeddings — Node2Vec &amp; DeepWalk</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Understand the idea: compress a node's structural role into a fixed-size vector.</li>
+      <li>Run Node2Vec on a real graph and visualize embeddings with t-SNE.</li>
+      <li>See how embeddings capture community structure without being told about communities.</li>
+    </ul>
+    <h3>Reading</h3>
+    <p>Stanford CS224W Lectures 4–5 (Node Embeddings). The original Node2Vec paper abstract and Section 3 are well worth reading.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 19</div>
+      <div class="lab-title">Node2Vec Embeddings &amp; t-SNE Visualization</div>
+      <div class="lab-objective">Goal: Generate node embeddings for the Karate Club and visualize them — do the two factions separate?</div>
+<pre><span class="cm"># In Colab: install node2vec</span>
+<span class="cm"># !pip install node2vec</span>
+<span class="cm"># Alternative: PyG has a built-in Node2Vec at</span>
+<span class="cm"># torch_geometric.nn.Node2Vec (better maintained)</span>
+
+<span class="kw">import</span> networkx <span class="kw">as</span> nx
+<span class="kw">from</span> node2vec <span class="kw">import</span> Node2Vec
+<span class="kw">from</span> sklearn.manifold <span class="kw">import</span> TSNE
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+K = nx.<span class="fn">karate_club_graph</span>()
+
+<span class="cm"># Generate embeddings</span>
+n2v = <span class="fn">Node2Vec</span>(K, dimensions=<span class="num">64</span>, walk_length=<span class="num">30</span>,
+               num_walks=<span class="num">200</span>, p=<span class="num">1</span>, q=<span class="num">1</span>, seed=<span class="num">42</span>)
+model = n2v.<span class="fn">fit</span>(window=<span class="num">10</span>, min_count=<span class="num">1</span>)
+
+<span class="cm"># Extract embeddings into a matrix</span>
+nodes = <span class="fn">sorted</span>(K.<span class="fn">nodes</span>())
+embeddings = np.<span class="fn">array</span>([model.wv[<span class="fn">str</span>(n)] <span class="kw">for</span> n <span class="kw">in</span> nodes])
+
+<span class="cm"># t-SNE to 2D</span>
+tsne = <span class="fn">TSNE</span>(n_components=<span class="num">2</span>, random_state=<span class="num">42</span>, perplexity=<span class="num">10</span>)
+coords = tsne.<span class="fn">fit_transform</span>(embeddings)
+
+<span class="cm"># Color by ground-truth faction</span>
+colors = [<span class="str">"#58a6ff"</span> <span class="kw">if</span> K.nodes[n][<span class="str">"club"</span>]==<span class="str">"Mr. Hi"</span> <span class="kw">else</span> <span class="str">"#d29922"</span>
+          <span class="kw">for</span> n <span class="kw">in</span> nodes]
+
+plt.<span class="fn">figure</span>(figsize=(<span class="num">8</span>,<span class="num">6</span>))
+plt.<span class="fn">scatter</span>(coords[:,<span class="num">0</span>], coords[:,<span class="num">1</span>], c=colors, s=<span class="num">120</span>)
+<span class="kw">for</span> i, n <span class="kw">in</span> <span class="fn">enumerate</span>(nodes):
+    plt.<span class="fn">annotate</span>(<span class="fn">str</span>(n), (coords[i,<span class="num">0</span>]+<span class="num">0.5</span>, coords[i,<span class="num">1</span>]+<span class="num">0.5</span>), fontsize=<span class="num">8</span>)
+plt.<span class="fn">title</span>(<span class="str">"Node2Vec Embeddings (t-SNE)"</span>)
+plt.<span class="fn">show</span>()</pre>
+      <p class="hint"><strong>Experiment:</strong> Change the p and q parameters. High q favors BFS-like exploration (structural equivalence); high p favors DFS-like (community detection). How does the t-SNE plot change?</p>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 13 Check</div>
+      <p class="hint">You can explain what a node embedding is, generate them with Node2Vec, and interpret a t-SNE plot of embeddings.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 14 -->
+<section class="step-section p5">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 14</span>
+    <span class="step-title">Introduction to Graph Neural Networks</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Understand the message-passing framework: aggregate, update, readout.</li>
+      <li>Learn how GCN (Graph Convolutional Network) and GraphSAGE work at a high level.</li>
+      <li>Set up PyTorch Geometric and run a node classification example.</li>
+    </ul>
+    <h3>Reading</h3>
+    <p>CS224W Lectures 6–8 (GNNs). The PyTorch Geometric <a class="resource-link" href="https://pytorch-geometric.readthedocs.io/en/latest/get_started/introduction.html" target="_blank">Introduction tutorial</a> is essential.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 20</div>
+      <div class="lab-title">Node Classification with GCN on Cora</div>
+      <div class="lab-objective">Goal: Train a 2-layer GCN to classify paper topics in the Cora citation network.</div>
+<pre><span class="cm"># !pip install torch torch-geometric</span>
+
+<span class="kw">import</span> torch
+<span class="kw">import</span> torch.nn.functional <span class="kw">as</span> F
+<span class="kw">from</span> torch_geometric.datasets <span class="kw">import</span> Planetoid
+<span class="kw">from</span> torch_geometric.nn <span class="kw">import</span> GCNConv
+
+<span class="cm"># Load Cora dataset</span>
+dataset = <span class="fn">Planetoid</span>(root=<span class="str">'/tmp/Cora'</span>, name=<span class="str">'Cora'</span>)
+data = dataset[<span class="num">0</span>]
+<span class="fn">print</span>(<span class="str">f"Nodes: {data.num_nodes}, Edges: {data.num_edges}"</span>)
+<span class="fn">print</span>(<span class="str">f"Features: {data.num_node_features}, Classes: {dataset.num_classes}"</span>)
+
+<span class="cm"># Define a simple 2-layer GCN</span>
+<span class="kw">class</span> <span class="fn">GCN</span>(torch.nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        <span class="fn">super</span>().__init__()
+        self.conv1 = <span class="fn">GCNConv</span>(dataset.num_node_features, <span class="num">16</span>)
+        self.conv2 = <span class="fn">GCNConv</span>(<span class="num">16</span>, dataset.num_classes)
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, data):
+        x = self.conv1(data.x, data.edge_index)
+        x = F.<span class="fn">relu</span>(x)
+        x = F.<span class="fn">dropout</span>(x, training=self.training)
+        x = self.conv2(x, data.edge_index)
+        <span class="kw">return</span> F.<span class="fn">log_softmax</span>(x, dim=<span class="num">1</span>)
+
+<span class="cm"># Train</span>
+model = <span class="fn">GCN</span>()
+optimizer = torch.optim.<span class="fn">Adam</span>(model.<span class="fn">parameters</span>(), lr=<span class="num">0.01</span>, weight_decay=<span class="num">5e-4</span>)
+
+model.<span class="fn">train</span>()
+<span class="kw">for</span> epoch <span class="kw">in</span> <span class="fn">range</span>(<span class="num">200</span>):
+    optimizer.<span class="fn">zero_grad</span>()
+    out = <span class="fn">model</span>(data)
+    loss = F.<span class="fn">nll_loss</span>(out[data.train_mask], data.y[data.train_mask])
+    loss.<span class="fn">backward</span>()
+    optimizer.<span class="fn">step</span>()
+
+<span class="cm"># Evaluate</span>
+model.<span class="fn">eval</span>()
+pred = <span class="fn">model</span>(data).<span class="fn">argmax</span>(dim=<span class="num">1</span>)
+correct = (pred[data.test_mask] == data.y[data.test_mask]).<span class="fn">sum</span>()
+acc = <span class="fn">int</span>(correct) / <span class="fn">int</span>(data.test_mask.<span class="fn">sum</span>())
+<span class="fn">print</span>(<span class="str">f"Test accuracy: {acc:.4f}"</span>)</pre>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 14 Check</div>
+      <p class="hint">You can explain message passing in plain language, and you've trained a GCN that outperforms a non-graph baseline on node classification.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 15 -->
+<section class="step-section p5">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 15</span>
+    <span class="step-title">Link Prediction with GNNs</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Frame link prediction as a supervised learning problem on edge pairs.</li>
+      <li>Generate train/test edge splits properly (avoiding data leakage).</li>
+      <li>Train a GNN-based link predictor and evaluate with AUC.</li>
+    </ul>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 21</div>
+      <div class="lab-title">GNN Link Prediction on Cora</div>
+      <div class="lab-objective">Goal: Predict missing citation links using learned node embeddings.</div>
+<pre><span class="kw">from</span> torch_geometric.transforms <span class="kw">import</span> RandomLinkSplit
+<span class="kw">from</span> torch_geometric.nn <span class="kw">import</span> GCNConv
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> roc_auc_score
+
+<span class="cm"># Split edges into train/val/test</span>
+transform = <span class="fn">RandomLinkSplit</span>(
+    num_val=<span class="num">0.1</span>, num_test=<span class="num">0.1</span>,
+    add_negative_train_samples=<span class="kw">True</span>
+)
+train_data, val_data, test_data = <span class="fn">transform</span>(data)
+
+<span class="cm"># Encoder: GCN producing node embeddings</span>
+<span class="kw">class</span> <span class="fn">Encoder</span>(torch.nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        <span class="fn">super</span>().__init__()
+        self.conv1 = <span class="fn">GCNConv</span>(data.num_node_features, <span class="num">64</span>)
+        self.conv2 = <span class="fn">GCNConv</span>(<span class="num">64</span>, <span class="num">32</span>)
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, x, edge_index):
+        x = self.conv1(x, edge_index).<span class="fn">relu</span>()
+        <span class="kw">return</span> self.conv2(x, edge_index)
+
+<span class="cm"># Decoder: dot product between node embeddings</span>
+<span class="kw">def</span> <span class="fn">decode</span>(z, edge_index):
+    <span class="kw">return</span> (z[edge_index[<span class="num">0</span>]] * z[edge_index[<span class="num">1</span>]]).<span class="fn">sum</span>(dim=<span class="num">1</span>)
+
+encoder = <span class="fn">Encoder</span>()
+optimizer = torch.optim.<span class="fn">Adam</span>(encoder.<span class="fn">parameters</span>(), lr=<span class="num">0.01</span>)
+
+<span class="cm"># Training loop (simplified)</span>
+<span class="kw">for</span> epoch <span class="kw">in</span> <span class="fn">range</span>(<span class="num">100</span>):
+    encoder.<span class="fn">train</span>()
+    z = <span class="fn">encoder</span>(train_data.x, train_data.edge_index)
+    pos_score = <span class="fn">decode</span>(z, train_data.edge_label_index[:, train_data.edge_label==<span class="num">1</span>])
+    neg_score = <span class="fn">decode</span>(z, train_data.edge_label_index[:, train_data.edge_label==<span class="num">0</span>])
+    loss = F.<span class="fn">binary_cross_entropy_with_logits</span>(
+        torch.<span class="fn">cat</span>([pos_score, neg_score]),
+        torch.<span class="fn">cat</span>([torch.<span class="fn">ones_like</span>(pos_score), torch.<span class="fn">zeros_like</span>(neg_score)])
+    )
+    optimizer.<span class="fn">zero_grad</span>(); loss.<span class="fn">backward</span>(); optimizer.<span class="fn">step</span>()
+
+<span class="cm"># Evaluate</span>
+encoder.<span class="fn">eval</span>()
+z = <span class="fn">encoder</span>(test_data.x, test_data.edge_index)
+scores = <span class="fn">decode</span>(z, test_data.edge_label_index).<span class="fn">sigmoid</span>()
+auc = <span class="fn">roc_auc_score</span>(test_data.edge_label.<span class="fn">numpy</span>(), scores.<span class="fn">detach</span>().<span class="fn">numpy</span>())
+<span class="fn">print</span>(<span class="str">f"Link prediction AUC: {auc:.4f}"</span>)</pre>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 15 Check</div>
+      <p class="hint">You can frame link prediction as supervised learning, split edges properly, and train a GNN-based predictor.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 16 -->
+<section class="step-section p5">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 16</span>
+    <span class="step-title">Knowledge Graphs &amp; Graph Classification</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Understand knowledge graphs: triples (head, relation, tail) as a specialized graph structure.</li>
+      <li>Explore graph-level classification — predict properties of entire graphs, not individual nodes.</li>
+      <li>Use global pooling to aggregate node embeddings into graph-level representations.</li>
+    </ul>
+    <h3>Reading</h3>
+    <p>CS224W Lectures on Knowledge Graphs and Graph Classification. The PyG tutorials on graph classification are concise and clear.</p>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 22</div>
+      <div class="lab-title">Graph Classification on MUTAG</div>
+      <div class="lab-objective">Goal: Classify entire molecular graphs as mutagenic or not using a GNN + pooling architecture.</div>
+<pre><span class="kw">from</span> torch_geometric.datasets <span class="kw">import</span> TUDataset
+<span class="kw">from</span> torch_geometric.loader <span class="kw">import</span> DataLoader
+<span class="kw">from</span> torch_geometric.nn <span class="kw">import</span> GCNConv, global_mean_pool
+
+dataset = <span class="fn">TUDataset</span>(root=<span class="str">'/tmp/MUTAG'</span>, name=<span class="str">'MUTAG'</span>)
+<span class="fn">print</span>(<span class="str">f"Graphs: {len(dataset)}, Classes: {dataset.num_classes}"</span>)
+
+<span class="cm"># Train/test split</span>
+torch.<span class="fn">manual_seed</span>(<span class="num">42</span>)
+perm = torch.<span class="fn">randperm</span>(<span class="fn">len</span>(dataset))
+train_data = dataset[perm[:<span class="num">150</span>]]
+test_data  = dataset[perm[<span class="num">150</span>:]]
+
+<span class="kw">class</span> <span class="fn">GraphClassifier</span>(torch.nn.Module):
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        <span class="fn">super</span>().__init__()
+        self.conv1 = <span class="fn">GCNConv</span>(dataset.num_node_features, <span class="num">64</span>)
+        self.conv2 = <span class="fn">GCNConv</span>(<span class="num">64</span>, <span class="num">32</span>)
+        self.fc = torch.nn.<span class="fn">Linear</span>(<span class="num">32</span>, dataset.num_classes)
+
+    <span class="kw">def</span> <span class="fn">forward</span>(self, data):
+        x = self.conv1(data.x, data.edge_index).<span class="fn">relu</span>()
+        x = self.conv2(x, data.edge_index).<span class="fn">relu</span>()
+        x = <span class="fn">global_mean_pool</span>(x, data.batch)  <span class="cm"># graph-level</span>
+        <span class="kw">return</span> self.fc(x)
+
+model = <span class="fn">GraphClassifier</span>()
+loader = <span class="fn">DataLoader</span>(train_data, batch_size=<span class="num">32</span>, shuffle=<span class="kw">True</span>)
+optimizer = torch.optim.<span class="fn">Adam</span>(model.<span class="fn">parameters</span>(), lr=<span class="num">0.01</span>)
+
+<span class="kw">for</span> epoch <span class="kw">in</span> <span class="fn">range</span>(<span class="num">50</span>):
+    model.<span class="fn">train</span>()
+    <span class="kw">for</span> batch <span class="kw">in</span> loader:
+        out = <span class="fn">model</span>(batch)
+        loss = F.<span class="fn">cross_entropy</span>(out, batch.y)
+        optimizer.<span class="fn">zero_grad</span>(); loss.<span class="fn">backward</span>(); optimizer.<span class="fn">step</span>()
+
+<span class="cm"># Test accuracy</span>
+model.<span class="fn">eval</span>()
+test_loader = <span class="fn">DataLoader</span>(test_data, batch_size=<span class="num">64</span>)
+correct = total = <span class="num">0</span>
+<span class="kw">for</span> batch <span class="kw">in</span> test_loader:
+    pred = <span class="fn">model</span>(batch).<span class="fn">argmax</span>(dim=<span class="num">1</span>)
+    correct += (pred == batch.y).<span class="fn">sum</span>().<span class="fn">item</span>()
+    total += batch.y.<span class="fn">size</span>(<span class="num">0</span>)
+<span class="fn">print</span>(<span class="str">f"Test accuracy: {correct/total:.4f}"</span>)</pre>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Phase 5 Complete</div>
+      <p class="hint">You can generate node embeddings, train GNNs for node classification, link prediction, and graph classification. You understand the message-passing framework. Ready for Phase 6.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ████████████████████████████████████████████ -->
+<!--              PHASE 6                        -->
+<!-- ████████████████████████████████████████████ -->
+<div class="phase-divider pd-6">
+  <div class="phase-tag">Phase 6 of 6</div>
+  <h2>Capstone Project</h2>
+  <p>Apply the entire pipeline — modeling, storage, analytics, visualization, and ML — to a real-world dataset of your choosing. This is where everything comes together.</p>
+  <div class="phase-tools">Tools: <span>All previous tools combined</span></div>
+</div>
+
+<!-- Step 17 -->
+<section class="step-section p6">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 17</span>
+    <span class="step-title">Project Scoping &amp; Data Acquisition</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Select a domain and dataset that's rich enough for multi-phase analysis.</li>
+      <li>Define 3–5 concrete analytical questions the graph should answer.</li>
+      <li>Design a property graph schema and import the data.</li>
+    </ul>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 23</div>
+      <div class="lab-title">Capstone — Setup &amp; Exploration</div>
+      <div class="lab-objective">Goal: Choose your dataset, define questions, design the schema, import data, and complete an initial exploratory analysis.</div>
+
+      <p class="hint"><strong>Recommended free datasets:</strong></p>
+      <ul>
+        <li><strong>SNAP</strong> (snap.stanford.edu/data) — social networks, citation graphs, web graphs, Amazon co-purchase.</li>
+        <li><strong>Open Academic Graph</strong> — papers, authors, citations, venues across disciplines.</li>
+        <li><strong>Wikidata / DBpedia</strong> — knowledge graph of structured facts from Wikipedia.</li>
+        <li><strong>OpenStreetMap via OSMnx</strong> — real street networks for any city.</li>
+        <li><strong>SEC EDGAR</strong> — company officer/director networks from public filings.</li>
+      </ul>
+
+      <p class="hint"><strong>Deliverables for Step 17:</strong></p>
+      <ul>
+        <li>A 1-page project brief: domain, dataset source, graph schema diagram, and 3–5 analytical questions.</li>
+        <li>Data imported into both NetworkX (for exploratory analysis) and Neo4j (for persistent querying).</li>
+        <li>Basic profile: node/edge counts, degree distribution, density, connected components.</li>
+      </ul>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Step 17 Check</div>
+      <p class="hint">You have a well-scoped project with data loaded in two platforms and a clear set of questions to answer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 18 -->
+<section class="step-section p6">
+  <div class="step-header" onclick="toggle(this)">
+    <span class="step-num">Step 18</span>
+    <span class="step-title">Full Analysis, ML &amp; Presentation</span>
+    <span class="chevron">▾</span>
+  </div>
+  <div class="step-body">
+    <h3>Learning Objectives</h3>
+    <ul>
+      <li>Apply the full toolkit: centrality, community detection, GDS pipelines, and (optionally) GNN-based prediction.</li>
+      <li>Produce publication-quality visualizations in Gephi.</li>
+      <li>Write a clear analytical narrative answering your original questions.</li>
+    </ul>
+
+    <div class="lab-card">
+      <div class="lab-label">Lab 24</div>
+      <div class="lab-title">Capstone — Analysis &amp; Deliverable</div>
+      <div class="lab-objective">Goal: Deliver a complete graph analytics project — from raw data to insight.</div>
+
+      <p class="hint"><strong>Required components:</strong></p>
+      <ul>
+        <li><strong>Centrality analysis:</strong> Compute at least 3 centrality measures. Who/what are the most important entities and why do different measures disagree?</li>
+        <li><strong>Community structure:</strong> Run Louvain (or equivalent), report modularity, and characterize the top communities — what real-world grouping do they correspond to?</li>
+        <li><strong>Path analysis:</strong> Find notable shortest paths or structural holes. What do they reveal?</li>
+        <li><strong>Link prediction or similarity:</strong> Predict missing connections or find the most similar entity pairs. Evaluate prediction quality.</li>
+        <li><strong>Visualization:</strong> At least one Gephi export with meaningful color/size encoding, and at least one matplotlib/Colab chart (degree distribution, centrality comparison, etc.).</li>
+      </ul>
+
+      <p class="hint"><strong>Optional (stretch) components:</strong></p>
+      <ul>
+        <li>Train a GNN for node classification or link prediction on your dataset.</li>
+        <li>Generate Node2Vec embeddings and cluster them — do clusters match detected communities?</li>
+        <li>Build a Cypher-powered "recommendation engine" query on your Neo4j instance.</li>
+      </ul>
+
+      <p class="hint"><strong>Final deliverable format:</strong> A Colab notebook (or series of notebooks) with clear Markdown narrative, code, visualizations, and a concluding section that answers your original 3–5 questions with evidence from the analysis.</p>
+    </div>
+
+    <div class="checkpoint">
+      <div class="checkpoint-label">✓ Curriculum Complete</div>
+      <p class="hint">You have gone from "what is a node?" to designing, querying, analyzing, visualizing, and applying machine learning to real-world graphs — entirely on free, open platforms. From here, you're well-equipped to dive deeper into any sub-area: temporal graphs, heterogeneous GNNs, graph transformers, or production graph infrastructure.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+function toggle(header) {
+  header.classList.toggle('open');
+  header.nextElementSibling.classList.toggle('open');
+}
+</script>
+</body>
+</html>
